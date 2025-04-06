@@ -1,10 +1,12 @@
 package pt.unl.fct.di.apdc.firstwebapp.util;
 
+import pt.unl.fct.di.apdc.firstwebapp.enums.Roles;
+
 public class LoginData {
 	
 	public String username;
 	public String password;
-	
+
 	public LoginData() {
 		
 	}

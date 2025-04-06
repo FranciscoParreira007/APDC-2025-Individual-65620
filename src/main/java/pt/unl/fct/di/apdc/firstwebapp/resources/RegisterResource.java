@@ -164,8 +164,11 @@ public class RegisterResource {
 	public Response registerUserV5(RegisterData data) {
 		LOG.fine("Attempt to register user: " + data.username);
 
-		if(!data.validRegistration())
-			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
+		if (!data.validRegistration()){
+			return Response.status(Status.BAD_REQUEST)
+					.entity("Missing or wrong parameter")
+					.build();
+		}
 
 		Transaction txn = datastore.newTransaction();
 		try{

@@ -37,6 +37,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response.Status;
+import pt.unl.fct.di.apdc.firstwebapp.enums.Roles;
 import pt.unl.fct.di.apdc.firstwebapp.util.AuthToken;
 import pt.unl.fct.di.apdc.firstwebapp.util.LoginData;
 
@@ -408,7 +409,9 @@ public class LoginResource {
 				AuthToken token = new AuthToken(data.username, role);
 
 				LOG.info(LOG_MESSAGE_LOGIN_SUCCESSFUL + data.username);
-				return Response.ok(g.toJson(token)).build();
+				return Response.ok(g.toJson(token))
+						.entity("Login was successful.")
+						.build();
 
 			} else {
 				LOG.warning(LOG_MESSAGE_WRONG_PASSWORD + data.username);

@@ -5,7 +5,7 @@ public enum Roles {
     ENDUSER("ENDUSER"),
     BACKOFFICE("BACKOFFICE"),
     ADMIN("ADMIN"),
-    PARTNER("PARTNER"),;
+    PARTNER("PARTNER");
 
     private final String description;
 

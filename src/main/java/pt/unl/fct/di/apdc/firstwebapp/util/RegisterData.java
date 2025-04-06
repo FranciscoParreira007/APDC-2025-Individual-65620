@@ -1,6 +1,10 @@
 package pt.unl.fct.di.apdc.firstwebapp.util;
 
+import jakarta.ws.rs.core.Response;
 import pt.unl.fct.di.apdc.firstwebapp.enums.AccountProfile;
+import pt.unl.fct.di.apdc.firstwebapp.resources.LoginResource;
+
+import java.util.logging.Logger;
 
 public class RegisterData {
 
@@ -19,6 +23,8 @@ public class RegisterData {
 	public String address;
 	public String nifWorkPlace;
 	public String accountStatus;
+
+	private static final Logger LOG = Logger.getLogger(LoginResource.class.getName());
 
 
 	public RegisterData(){}
@@ -60,47 +66,47 @@ public class RegisterData {
 
 		if (!nonEmptyOrBlankField(username)) {
 			isValid = false;
-			System.out.println("Error: Username cannot be empty or blank.");
+			LOG.warning("Error: Username cannot be empty or blank.");
 		}
 		if (!nonEmptyOrBlankField(password)) {
 			isValid = false;
-			System.out.println("Error: Password cannot be empty or blank.");
+			LOG.warning("Error: Password cannot be empty or blank.");
 		}
 		if (!nonEmptyOrBlankField(email)) {
 			isValid = false;
-			System.out.println("Error: Email cannot be empty or blank.");
+			LOG.warning("Error: Email cannot be empty or blank.");
 		}
 		if (!email.contains("@")) {
 			isValid = false;
-			System.out.println("Error: Email must contain '@'.");
+			LOG.warning("Error: Email must contain '@'.");
 		}
 		if (!nonEmptyOrBlankField(name)) {
 			isValid = false;
-			System.out.println("Error: Name cannot be empty or empty.");
+			LOG.warning("Error: Name cannot be empty or blank.");
 		}
 		if (!nonEmptyOrBlankField(phoneNum)) {
 			isValid = false;
-			System.out.println("Error: Phone number cannot be empty or blank.");
+			LOG.warning("Error: Phone number cannot be empty or blank.");
 		}
 		if (!nonEmptyOrBlankField(confirmation)) {
 			isValid = false;
-			System.out.println("Error: The password Confirmation cannot be empty or blank.");
+			LOG.warning("Error: The password Confirmation cannot be empty or blank.");
 		}
 		if (!nonEmptyOrBlankField(accountProfile)) {
 			isValid = false;
-			System.out.println("Error: Account Profile cannot be empty or blank.");
+			LOG.warning("Error: Account Profile cannot be empty or blank.");
 		}
-		if(!AccountProfile.PUBLIC.name().equals(accountProfile) && !AccountProfile.PRIVATE.name().equals(accountProfile)){
+		if(!accountProfile.equals(AccountProfile.PUBLIC.getDescription()) && !accountProfile.equals(AccountProfile.PRIVATE.getDescription())){
 			isValid = false;
-			System.out.println("Error: Account Profile must be either " + AccountProfile.PUBLIC + " or " + AccountProfile.PRIVATE + ".");
+			LOG.warning("Error: Account Profile must be either " + AccountProfile.PUBLIC + " or " + AccountProfile.PRIVATE + ".");
 		}
 		if (!isPasswordValid(password)) {
 			isValid = false;
-			System.out.println("Error: Password does not meet the requirements to be accepted.");
+			LOG.warning("Error: Password does not meet the requirements to be accepted.");
 		}
 		if (!password.equals(confirmation)) {
 			isValid = false;
-			System.out.println("Error: Password and Confirmation do not match.");
+			LOG.warning("Error: Password and Confirmation do not match.");
 		}
 
 		return isValid;
