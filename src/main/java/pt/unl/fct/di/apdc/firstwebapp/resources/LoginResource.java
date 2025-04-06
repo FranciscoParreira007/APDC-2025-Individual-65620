@@ -385,4 +385,39 @@ public class LoginResource {
 				.build();
 	}
 
+
+	/**
+	 *  Login (OP2)
+	 */
+	@POST
+	@Path("/v3")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	 public Response doLoginV3(LoginData data) {
+
+		LOG.fine(LOG_MESSAGE_LOGIN_ATTEMP + data.username);
+
+		Key userKey = userKeyFactory.newKey(data.username);
+		Entity user = datastore.get(userKey);
+
+		if(user != null) {
+			String hashedPWD = user.getString(USER_PWD);
+			if(hashedPWD.equals(DigestUtils.sha512Hex(data.password))) {
+				String role = user.contains("user_role") ? user.getString("user_role") : "ENDUSER";
+
+				AuthToken token = new AuthToken(data.username, role);
+
+				LOG.info(LOG_MESSAGE_LOGIN_SUCCESSFUL + data.username);
+				return Response.ok(g.toJson(token)).build();
+
+			} else {
+				LOG.warning(LOG_MESSAGE_WRONG_PASSWORD + data.username);
+				return Response.status(Status.FORBIDDEN).entity(MESSAGE_INVALID_CREDENTIALS).build();
+			}
+
+		} else {
+			LOG.warning(LOG_MESSAGE_UNKNOW_USER + data.username);
+			return Response.status(Status.FORBIDDEN).entity(MESSAGE_INVALID_CREDENTIALS).build();
+		}
+	}
 }

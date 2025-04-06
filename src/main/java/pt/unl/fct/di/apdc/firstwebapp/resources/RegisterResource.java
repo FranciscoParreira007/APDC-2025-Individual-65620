@@ -152,4 +152,65 @@ public class RegisterResource {
 			return Response.status(Status.BAD_REQUEST).entity(e.getReason()).build();
 		}
 	}
+
+
+	/**
+	 * Register account v5 (OP1)
+	 *
+	 */
+	@POST
+	@Path("/v5")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response registerUserV5(RegisterData data) {
+		LOG.fine("Attempt to register user: " + data.username);
+
+		if(!data.validRegistration())
+			return Response.status(Status.BAD_REQUEST).entity("Missing or wrong parameter.").build();
+
+		Transaction txn = datastore.newTransaction();
+		try{
+			Key userKey = datastore.newKeyFactory().setKind("User").newKey(data.username);
+			Entity user = txn.get(userKey);
+
+			if(user != null) {
+				txn.rollback();
+				return Response.status(Status.CONFLICT).entity("User already exists.").build();
+			}
+
+			Entity newUser = Entity.newBuilder(userKey)
+					.set("user_name", data.username)
+					.set("user_complete_name", data.name)
+					.set("user_pwd", DigestUtils.sha512Hex(data.password))
+					.set("user_email", data.email)
+					.set("user_phone", data.phoneNum)
+					.set("user_account_profile", data.accountProfile)
+					.set("user_cc_number", data.ccNumber)
+					.set("user_role", "ENDUSER")
+					.set("user_nif", data.nif)
+					.set("user_work_place", data.workPlace)
+					.set("user_work_function", data.workFunction)
+					.set("user_address", data.address)
+					.set("user_nif_work_place", data.nifWorkPlace)
+					.set("user_account_status", "DESATIVADA")
+					.build();
+
+				txn.put(newUser);
+				txn.commit();
+				LOG.info("User registered " + data.username);
+
+				return Response.ok().build();
+
+		} catch(DatastoreException e) {
+			LOG.log(Level.ALL, e.toString());
+
+			if (txn.isActive()) {
+				txn.rollback();
+			}
+			return Response.status(Status.INTERNAL_SERVER_ERROR).entity(e.toString()).build();
+
+		} finally {
+			if (txn.isActive())
+				txn.rollback();
+		}
+	}
 }
