@@ -389,6 +389,7 @@ public class LoginResource {
 
 	/**
 	 *  Login (OP2)
+	 *  INCOMPLETO!!! DEVO TER ATENÇÃO AOS ÚLTIMOS PONTOS
 	 */
 	@POST
 	@Path("/v3")
@@ -400,13 +401,47 @@ public class LoginResource {
 
 		Key userKey = userKeyFactory.newKey(data.username);
 		Entity user = datastore.get(userKey);
+		Transaction txn = datastore.newTransaction();
 
-		if(user != null) {
+		if (user == null) {
+			Query<Entity> query = Query.newEntityQueryBuilder()
+					.setKind("User")
+					.setFilter(PropertyFilter.eq("user_email", data.username))
+					.build();
+
+			QueryResults<Entity> results = datastore.run(query);
+			if (results.hasNext()) {
+				user = results.next();
+			}
+		}
+
+		if(user == null) {
+			LOG.warning(LOG_MESSAGE_UNKNOW_USER + data.username);
+			return Response.status(Status.FORBIDDEN)
+					.entity(MESSAGE_INVALID_CREDENTIALS)
+					.build();
+		}
+
 			String hashedPWD = user.getString(USER_PWD);
 			if(hashedPWD.equals(DigestUtils.sha512Hex(data.password))) {
 				String role = user.contains("user_role") ? user.getString("user_role") : "ENDUSER";
 
 				AuthToken token = new AuthToken(data.username, role);
+
+				String tokenId = token.tokenID;
+				Timestamp validFromTimestamp = toTimestamp(token.validFrom);
+				Timestamp validUntilTimestamp = toTimestamp(token.validTo);
+
+				Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(tokenId);
+
+				Entity tokenEntity = Entity.newBuilder(tokenKey).set("username", token.username)
+						.set("user_role", token.role)
+						.set("valid_from", validFromTimestamp)
+						.set("valid_until", validUntilTimestamp)
+						.set("token", tokenId).build();
+
+				txn.put(tokenEntity);
+				txn.commit();
 
 				LOG.info(LOG_MESSAGE_LOGIN_SUCCESSFUL + data.username);
 				return Response.ok(g.toJson(token))
@@ -418,9 +453,9 @@ public class LoginResource {
 				return Response.status(Status.FORBIDDEN).entity(MESSAGE_INVALID_CREDENTIALS).build();
 			}
 
-		} else {
-			LOG.warning(LOG_MESSAGE_UNKNOW_USER + data.username);
-			return Response.status(Status.FORBIDDEN).entity(MESSAGE_INVALID_CREDENTIALS).build();
-		}
+	}
+
+	private Timestamp toTimestamp(long time) {
+		return Timestamp.ofTimeSecondsAndNanos(time / 1000, (int)(time % 1000 * 1_000_000));
 	}
 }
