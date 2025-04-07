@@ -8,7 +8,7 @@ public enum AccountStatus {
 
     private final String description;
 
-    private AccountStatus(String description){
+    AccountStatus(String description){
         this.description = description;
     }
 

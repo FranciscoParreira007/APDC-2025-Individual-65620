@@ -6,7 +6,7 @@ public enum AccountProfile {
 
     private final String description;
 
-    private AccountProfile(String description){
+    AccountProfile(String description){
         this.description = description;
     }
 

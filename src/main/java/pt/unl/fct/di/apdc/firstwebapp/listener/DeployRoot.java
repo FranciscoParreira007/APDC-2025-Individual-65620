@@ -31,15 +31,15 @@ public class DeployRoot implements ServletContextListener {
                     .set("user_name", "fa")
                     .set("user_complete_name", "Francisco Parreira")
                     .set("user_pwd", DigestUtils.sha512Hex("Password*123!"))
-                    .set("user_email", "email@gmail.com")
-                    .set("user_phone", "1426576162")
+                    .set("user_email", "faabparreira@gmail.com")
+                    .set("user_phone", "234365866")
                     .set("user_account_profile", "privado")
-                    .set("user_cc_number", "712653816")
+                    .set("user_cc_number", "513675485")
                     .set("user_role", "ADMIN")
                     .set("user_nif", "2161562412")
                     .set("user_work_place", "FCT NOVA")
                     .set("user_work_function", "Estudante")
-                    .set("user_address", "AJuisnfuahisinfha")
+                    .set("user_address", "Rua dos Caçadores, Canaviais")
                     .set("user_nif_work_place", "1321512235326")
                     .set("user_account_status", "DESATIVADA")
                     .build();
@@ -61,5 +61,4 @@ public class DeployRoot implements ServletContextListener {
                 txn.rollback();
         }
     }
-
 }

@@ -5,15 +5,15 @@ import pt.unl.fct.di.apdc.firstwebapp.enums.Roles;
 public class ChangeRoleData {
 
     public String targetUsername;
-    public String requesterUsername;
+    public String token;
     public Roles role;
 
     public ChangeRoleData() {}
 
-    public ChangeRoleData(String targetUsername, String requesterUsername,
+    public ChangeRoleData(String targetUsername, String token,
                            Roles role) {
         this.targetUsername = targetUsername;
-        this.requesterUsername = requesterUsername;
+        this.token = token;
         this.role = role;
     }
  }

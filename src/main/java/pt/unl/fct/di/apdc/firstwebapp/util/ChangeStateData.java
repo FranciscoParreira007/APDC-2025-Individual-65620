@@ -6,15 +6,15 @@ public class ChangeStateData {
 
     public AccountStatus state;
     public String targetUsername;
-    public String requesterUsername;
+    public String token;
 
     public ChangeStateData() {}
 
 
-    public ChangeStateData(String targetUsername, String requesterUsername,
+    public ChangeStateData(String targetUsername, String token,
                            AccountStatus state) {
         this.targetUsername = targetUsername;
-        this.requesterUsername = requesterUsername;
+        this.token = token;
         this.state = state;
     }
 

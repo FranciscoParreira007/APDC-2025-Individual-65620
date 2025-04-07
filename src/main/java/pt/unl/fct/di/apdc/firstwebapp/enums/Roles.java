@@ -9,7 +9,7 @@ public enum Roles {
 
     private final String description;
 
-    private Roles(String description){
+    Roles(String description){
         this.description = description;
     }
 

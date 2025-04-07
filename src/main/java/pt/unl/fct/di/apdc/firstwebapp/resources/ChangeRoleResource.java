@@ -29,13 +29,16 @@ public class ChangeRoleResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response changeUserRole(ChangeRoleData data) {
 
-        if (data == null || data.requesterUsername == null || data.targetUsername == null || data.role == null) {
+        if (data == null || data.token == null || data.targetUsername == null || data.role == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Missing required data.").build();
         }
 
-        Key requesterKey = userKeyFactory.newKey(data.requesterUsername);
-        Entity requester = datastore.get(requesterKey);
-        if (requester == null) {
+        Transaction txn = datastore.newTransaction();
+
+        Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.token);
+        Entity tokenID = txn.get(tokenKey);
+
+        if (tokenID == null) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Requester not found.").build();
         }
 
@@ -45,7 +48,7 @@ public class ChangeRoleResource {
             return Response.status(Response.Status.NOT_FOUND).entity("Target user not found.").build();
         }
 
-        String requesterRole = requester.getString("user_role");
+        String requesterRole = tokenID.getString("user_role");
         String newRole = data.role.getDescription();
 
         switch (requesterRole) {
@@ -75,8 +78,9 @@ public class ChangeRoleResource {
                 .build();
 
         datastore.update(updatedTarget);
+        txn.put(tokenID);
+        txn.commit();
 
         return Response.ok(g.toJson(updatedTarget)).build();
     }
-
 }
