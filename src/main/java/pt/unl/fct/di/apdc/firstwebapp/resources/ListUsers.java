@@ -14,11 +14,7 @@ import pt.unl.fct.di.apdc.firstwebapp.enums.AccountStatus;
 import pt.unl.fct.di.apdc.firstwebapp.enums.Roles;
 import pt.unl.fct.di.apdc.firstwebapp.util.ListUsersData;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+import java.util.*;
 
 
 @Path("/list")
@@ -68,85 +64,85 @@ public class ListUsers {
                         Entity user = results.next();
                         usersInfo = new HashMap<>();
 
-                        if (user.getString("user_name") == null) {
+                        if (Objects.equals(user.getString("user_name"), "")) {
                             usersInfo.put("user_name", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_name", user.getString("user_name"));
                         }
 
-                        if (user.getString("user_email") == null) {
+                        if (Objects.equals(user.getString("user_email"), "")) {
                             usersInfo.put("user_email", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_email", user.getString("user_email"));
                         }
 
-                        if (user.getString("user_complete_name") == null) {
+                        if (Objects.equals(user.getString("user_complete_name"), "")) {
                             usersInfo.put("user_complete_name", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_complete_name", user.getString("user_complete_name"));
                         }
 
-                        if (user.getString("user_account_profile") == null) {
+                        if (Objects.equals(user.getString("user_account_profile"), "")) {
                             usersInfo.put("user_account_profile", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_account_profile", user.getString("user_account_profile"));
                         }
 
-                        if (user.getString("user_account_status") == null) {
+                        if (Objects.equals(user.getString("user_account_status"), "")) {
                             usersInfo.put("user_account_status", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_account_status", user.getString("user_account_status"));
                         }
 
-                        if (user.getString("user_address") == null) {
+                        if (Objects.equals(user.getString("user_address"), "")) {
                             usersInfo.put("user_address", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_address", user.getString("user_address"));
                         }
 
-                        if (user.getString("user_cc_number") == null) {
+                        if (Objects.equals(user.getString("user_cc_number"), "")) {
                             usersInfo.put("user_cc_number", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_cc_number", user.getString("user_cc_number"));
                         }
 
-                        if (user.getString("user_nif") == null) {
+                        if (Objects.equals(user.getString("user_nif"), "")) {
                             usersInfo.put("user_nif", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_nif", user.getString("user_nif"));
                         }
 
-                        if (user.getString("user_nif_work_place") == null) {
+                        if (Objects.equals(user.getString("user_nif_work_place"), "")) {
                             usersInfo.put("user_nif_work_place", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_nif_work_place", user.getString("user_nif_work_place"));
                         }
 
-                        if (user.getString("user_phone") == null) {
+                        if (Objects.equals(user.getString("user_phone"), "")) {
                             usersInfo.put("user_phone", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_phone", user.getString("user_phone"));
                         }
 
-                        if (user.getString("user_pwd") == null) {
+                        if (Objects.equals(user.getString("user_pwd"), "")) {
                             usersInfo.put("user_pwd", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_pwd", user.getString("user_pwd"));
                         }
 
-                        if (user.getString("user_role") == null) {
+                        if (Objects.equals(user.getString("user_role"), "")) {
                             usersInfo.put("user_role", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_role", user.getString("user_role"));
                         }
 
-                        if (user.getString("user_work_function") == null) {
+                        if (Objects.equals(user.getString("user_work_function"), "")) {
                             usersInfo.put("user_work_function", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_work_function", user.getString("user_work_function"));
                         }
 
-                        if (user.getString("user_work_place") == null) {
+                        if (Objects.equals(user.getString("user_work_place"), "")) {
                             usersInfo.put("user_work_place", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_work_place", user.getString("user_work_place"));
@@ -168,18 +164,18 @@ public class ListUsers {
                         Entity user = results.next();
                         usersInfo = new HashMap<>();
 
-                        if(user.getString("user_name") == null) {
+                        if(Objects.equals(user.getString("user_name"), "")) {
                             usersInfo.put("user_name", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_name", user.getString("user_name"));
                         }
-                        if (user.getString("user_email") == null) {
+                        if (Objects.equals(user.getString("user_email"), "")) {
                             usersInfo.put("user_email", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_email", user.getString("user_email"));
                         }
 
-                        if (user.getString("user_complete_name") == null) {
+                        if (Objects.equals(user.getString("user_complete_name"), "")) {
                             usersInfo.put("user_complete_name", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_complete_name", user.getString("user_complete_name"));
@@ -199,85 +195,85 @@ public class ListUsers {
                         Entity user = results.next();
                         usersInfo = new HashMap<>();
 
-                        if (user.getString("user_name") == null) {
+                        if (Objects.equals(user.getString("user_name"), "")) {
                             usersInfo.put("user_name", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_name", user.getString("user_name"));
                         }
 
-                        if (user.getString("user_email") == null) {
+                        if (Objects.equals(user.getString("user_email"), "")) {
                             usersInfo.put("user_email", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_email", user.getString("user_email"));
                         }
 
-                        if (user.getString("user_complete_name") == null) {
+                        if (Objects.equals(user.getString("user_complete_name"), "")) {
                             usersInfo.put("user_complete_name", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_complete_name", user.getString("user_complete_name"));
                         }
 
-                        if (user.getString("user_account_profile") == null) {
+                        if (Objects.equals(user.getString("user_account_profile"), "")) {
                             usersInfo.put("user_account_profile", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_account_profile", user.getString("user_account_profile"));
                         }
 
-                        if (user.getString("user_account_status") == null) {
+                        if (Objects.equals(user.getString("user_account_status"), "")) {
                             usersInfo.put("user_account_status", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_account_status", user.getString("user_account_status"));
                         }
 
-                        if (user.getString("user_address") == null) {
+                        if (Objects.equals(user.getString("user_address"), "")) {
                             usersInfo.put("user_address", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_address", user.getString("user_address"));
                         }
 
-                        if (user.getString("user_cc_number") == null) {
+                        if (Objects.equals(user.getString("user_cc_number"), "")) {
                             usersInfo.put("user_cc_number", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_cc_number", user.getString("user_cc_number"));
                         }
 
-                        if (user.getString("user_nif") == null) {
+                        if (Objects.equals(user.getString("user_nif"), "")) {
                             usersInfo.put("user_nif", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_nif", user.getString("user_nif"));
                         }
 
-                        if (user.getString("user_nif_work_place") == null) {
+                        if (Objects.equals(user.getString("user_nif_work_place"), "")) {
                             usersInfo.put("user_nif_work_place", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_nif_work_place", user.getString("user_nif_work_place"));
                         }
 
-                        if (user.getString("user_phone") == null) {
+                        if (Objects.equals(user.getString("user_phone"), "")) {
                             usersInfo.put("user_phone", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_phone", user.getString("user_phone"));
                         }
 
-                        if (user.getString("user_pwd") == null) {
+                        if (Objects.equals(user.getString("user_pwd"), "")) {
                             usersInfo.put("user_pwd", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_pwd", user.getString("user_pwd"));
                         }
 
-                        if (user.getString("user_role") == null) {
+                        if (Objects.equals(user.getString("user_role"), "")) {
                             usersInfo.put("user_role", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_role", user.getString("user_role"));
                         }
 
-                        if (user.getString("user_work_function") == null) {
+                        if (Objects.equals(user.getString("user_work_function"), "")) {
                             usersInfo.put("user_work_function", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_work_function", user.getString("user_work_function"));
                         }
 
-                        if (user.getString("user_work_place") == null) {
+                        if (Objects.equals(user.getString("user_work_place"), "")) {
                             usersInfo.put("user_work_place", "NOT DEFINED");
                         } else {
                             usersInfo.put("user_work_place", user.getString("user_work_place"));
