@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class ChangePasswordResource {
 
     private static final Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-    private static final Logger LOG = Logger.getLogger(RegisterResource.class.getName());
+    private static final Logger LOG = Logger.getLogger(ChangePasswordResource.class.getName());
 
     private final Gson g = new Gson();
 
@@ -28,52 +28,62 @@ public class ChangePasswordResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response changePassword(ChangePasswordData data) {
 
-        Transaction txn = datastore.newTransaction();
-
-        if(data == null || data.token == null || data.newPassword == null
-            || data.confirmPassword == null || data.currentPassword == null) {
+        if (data == null || data.token == null || data.newPassword == null
+                || data.confirmPassword == null || data.currentPassword == null) {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        String newPwd = data.newPassword;
-        String confirmation = data.confirmPassword;
-
-        if(!newPwd.equals(confirmation)) {
+        if (!data.newPassword.equals(data.confirmPassword)) {
             return Response.status(Status.BAD_REQUEST)
                     .entity("Password and its confirmation must be equal.").build();
         }
 
-        Key targetTokenKey = datastore.newKeyFactory()
-                .setKind("Token")
-                .newKey(data.token);
-        Entity targetTokenEntity = txn.get(targetTokenKey);
+        Transaction txn = datastore.newTransaction();
 
-        if(targetTokenEntity == null) {
-            return Response.status(Status.NOT_FOUND)
-                    .entity("Invalid token.").build();
-        }
+        try {
+            Key tokenKey = datastore.newKeyFactory().setKind("Token").newKey(data.token);
+            Entity tokenEntity = txn.get(tokenKey);
 
-        String currentPassword = targetTokenEntity.getString("user_pwd");
-        String currentPwdHash = DigestUtils.sha256Hex(data.currentPassword);
+            if (tokenEntity == null) {
+                txn.rollback();
+                return Response.status(Status.NOT_FOUND).entity("Invalid token.").build();
+            }
 
-        if(!currentPassword.equals(currentPwdHash)) {
-            return Response.status(Status.BAD_REQUEST)
-                    .entity("Current Password is not correct.")
+            String username = tokenEntity.getString("username");
+            Key userKey = datastore.newKeyFactory().setKind("User").newKey(username);
+            Entity userEntity = txn.get(userKey);
+
+            if (userEntity == null) {
+                txn.rollback();
+                return Response.status(Status.NOT_FOUND).entity("User not found.").build();
+            }
+
+            String currentPwdHash = DigestUtils.sha512Hex(data.currentPassword);
+            String storedPwd = userEntity.getString("user_pwd");
+
+            if (!storedPwd.equals(currentPwdHash)) {
+                txn.rollback();
+                return Response.status(Status.BAD_REQUEST)
+                        .entity("Current password is not correct.").build();
+            }
+
+            String newPwdHash = DigestUtils.sha512Hex(data.newPassword);
+
+            Entity updatedUser = Entity.newBuilder(userEntity)
+                    .set("user_pwd", newPwdHash)
                     .build();
+
+            txn.put(updatedUser);
+            txn.commit();
+
+            return Response.ok().entity("Password changed successfully.").build();
+
+        } catch (Exception e) {
+            LOG.severe("Failed to change password: " + e.getMessage());
+            if (txn.isActive()) {
+                txn.rollback();
+            }
+            return Response.serverError().entity("Internal Server Error").build();
         }
-
-        String hashPwd = DigestUtils.sha512Hex(newPwd);
-
-        Entity updatedUser = Entity.newBuilder(targetTokenEntity)
-                .set("user_pwd", hashPwd)
-                .build();
-
-        datastore.put(updatedUser);
-        txn.put(updatedUser);
-        txn.commit();
-
-        return Response.ok()
-                .entity("Password changed successfully.")
-                .build();
     }
 }
